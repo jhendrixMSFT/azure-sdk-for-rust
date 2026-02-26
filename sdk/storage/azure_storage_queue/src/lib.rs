@@ -9,34 +9,69 @@ mod generated;
 mod logging;
 
 use crate::models::SentMessage;
-use azure_core::http::{DeserializeWith, Response, XmlFormat};
+use azure_core::time::OffsetDateTime;
 use serde::Deserialize;
 
-impl TryFrom<Response<SentMessage, XmlFormat>> for SentMessage {
-    type Error = azure_core::Error;
-    fn try_from(response: Response<SentMessage, XmlFormat>) -> Result<Self, Self::Error> {
-        #[derive(Clone, Default, Deserialize)]
-        #[non_exhaustive]
+impl<'de> Deserialize<'de> for SentMessage {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        #[derive(Deserialize)]
         #[serde(rename = "QueueMessagesList")]
         struct ListOfSentMessage {
-            /// The list of enqueued messages.
             #[serde(rename = "QueueMessage", skip_serializing_if = "Option::is_none")]
-            pub items: Option<Vec<SentMessage>>,
+            pub items: Option<Vec<SentMessageInner>>,
         }
 
-        let list = <ListOfSentMessage as DeserializeWith<XmlFormat>>::deserialize_with(
-            response.into_body(),
-        )?;
-        list.items
+        #[derive(Deserialize)]
+        struct SentMessageInner {
+            #[serde(
+                default,
+                rename = "ExpirationTime",
+                skip_serializing_if = "Option::is_none",
+                with = "azure_core::time::rfc7231::option"
+            )]
+            pub expiration_time: Option<OffsetDateTime>,
+
+            #[serde(
+                default,
+                rename = "InsertionTime",
+                skip_serializing_if = "Option::is_none",
+                with = "azure_core::time::rfc7231::option"
+            )]
+            pub insertion_time: Option<OffsetDateTime>,
+
+            #[serde(rename = "MessageId", skip_serializing_if = "Option::is_none")]
+            pub message_id: Option<String>,
+
+            #[serde(rename = "PopReceipt", skip_serializing_if = "Option::is_none")]
+            pub pop_receipt: Option<String>,
+
+            #[serde(
+                default,
+                rename = "TimeNextVisible",
+                skip_serializing_if = "Option::is_none",
+                with = "azure_core::time::rfc7231::option"
+            )]
+            pub time_next_visible: Option<OffsetDateTime>,
+        }
+
+        let list = ListOfSentMessage::deserialize(deserializer)?;
+        let message = list
+            .items
             .unwrap_or_default()
             .into_iter()
             .next()
-            .ok_or_else(|| {
-                azure_core::Error::with_message(
-                    azure_core::error::ErrorKind::DataConversion,
-                    "No messages found in the response.",
-                )
-            })
+            .ok_or_else(|| serde::de::Error::custom("No messages found in the response."))?;
+
+        Ok(Self {
+            expiration_time: message.expiration_time,
+            insertion_time: message.insertion_time,
+            message_id: message.message_id,
+            pop_receipt: message.pop_receipt,
+            time_next_visible: message.time_next_visible,
+        })
     }
 }
 
