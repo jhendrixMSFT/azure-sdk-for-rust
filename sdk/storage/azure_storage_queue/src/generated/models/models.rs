@@ -344,9 +344,9 @@ pub struct RetentionPolicy {
 
 /// The object returned in the QueueMessageList array when calling Put Message on a
 /// Queue
-#[derive(Clone, Default, SafeDebug, Serialize)]
+#[derive(Clone, Default, Deserialize, SafeDebug, Serialize)]
 #[non_exhaustive]
-pub struct SentMessage {
+pub struct SentMessageInner {
     /// The time that the Message will expire and be automatically deleted.
     #[serde(
         default,

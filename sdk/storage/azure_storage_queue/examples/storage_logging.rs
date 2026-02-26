@@ -136,7 +136,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let sent_message = sent.into_model()?;
     println!(
         "Message sent. ID: {}",
-        sent_message.message_id.as_deref().unwrap_or("")
+        sent_message.0.message_id.as_deref().unwrap_or("")
     );
 
     // Receive the message back. Receiving dequeues the message and returns a fresh
