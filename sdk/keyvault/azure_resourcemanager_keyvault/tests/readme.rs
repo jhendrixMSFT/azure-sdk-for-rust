@@ -14,11 +14,7 @@ async fn readme(ctx: TestContext) -> Result<()> {
     recording.instrument(&mut options.client_options);
 
     let subscription_id = recording.var("KEYVAULT_SUBSCRIPTION_ID", None);
-    let client = KeyVaultClient::new(
-        subscription_id,
-        recording.credential(),
-        Some(options),
-    )?;
+    let client = KeyVaultClient::new(subscription_id, recording.credential(), Some(options))?;
 
     // Define variables used in README examples
     let resource_group = recording.var("KEYVAULT_RESOURCE_GROUP", None);
