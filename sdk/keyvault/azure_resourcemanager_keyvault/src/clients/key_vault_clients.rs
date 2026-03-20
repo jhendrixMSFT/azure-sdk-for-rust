@@ -19,14 +19,14 @@ impl KeyVaultClient {
     ///
     /// # Arguments
     ///
-    /// * `subscription_id` - The ID of the target subscription. The value must be an UUID.
     /// * `credential` - An implementation of [`TokenCredential`](azure_core::credentials::TokenCredential) that can provide an
+    /// * `subscription_id` - The ID of the target subscription. The value must be an UUID.
     ///   Entra ID token to use when authenticating.
     /// * `options` - Optional configuration for the client.
     #[tracing::new("Microsoft.KeyVault")]
     pub fn new(
-        subscription_id: String,
         credential: Arc<dyn TokenCredential>,
+        subscription_id: String,
         options: Option<super::KeyVaultClientOptions>,
     ) -> Result<Self> {
         let options = options.unwrap_or_default();

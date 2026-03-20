@@ -64,7 +64,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let credential = DeveloperToolsCredential::new(None)?;
     let subscription_id = std::env::var("AZURE_SUBSCRIPTION_ID")?;
     let client = KeyVaultClient::new(
-        "https://management.azure.com",
         credential.into(),
         subscription_id,
         None,

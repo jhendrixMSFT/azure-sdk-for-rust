@@ -19,7 +19,7 @@ async fn managed_hsm_lifecycle(ctx: TestContext) -> Result<()> {
     recording.instrument(&mut options.client_options);
 
     let subscription_id = recording.var("KEYVAULT_SUBSCRIPTION_ID", None);
-    let client = KeyVaultClient::new(subscription_id, recording.credential(), Some(options))?;
+    let client = KeyVaultClient::new(recording.credential(), subscription_id, Some(options))?;
 
     let resource_group = recording.var("KEYVAULT_RESOURCE_GROUP", None);
     let location = recording.var("KEYVAULT_LOCATION", None);
