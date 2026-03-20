@@ -11,15 +11,10 @@ use crate::generated::clients::{
     KeyVaultSecretsClient, KeyVaultVaultsClient,
 };
 use azure_core::{
-    credentials::TokenCredential,
     fmt::SafeDebug,
-    http::{
-        policies::{auth::BearerTokenAuthorizationPolicy, Policy},
-        ClientOptions, Pipeline, Url,
-    },
-    tracing, Result,
+    http::{ClientOptions, Pipeline, Url},
+    tracing,
 };
-use std::sync::Arc;
 
 /// The Azure management API provides a RESTful set of web services that interact with Azure Key Vault.
 #[tracing::client]
@@ -40,49 +35,6 @@ pub struct KeyVaultClientOptions {
 }
 
 impl KeyVaultClient {
-    /// Creates a new KeyVaultClient, using Entra ID authentication.
-    ///
-    /// # Arguments
-    ///
-    /// * `endpoint` - Service host
-    /// * `credential` - An implementation of [`TokenCredential`](azure_core::credentials::TokenCredential) that can provide an
-    ///   Entra ID token to use when authenticating.
-    /// * `subscription_id` - The ID of the target subscription. The value must be an UUID.
-    /// * `options` - Optional configuration for the client.
-    #[tracing::new("Microsoft.KeyVault")]
-    pub fn new(
-        endpoint: &str,
-        credential: Arc<dyn TokenCredential>,
-        subscription_id: String,
-        options: Option<KeyVaultClientOptions>,
-    ) -> Result<Self> {
-        let options = options.unwrap_or_default();
-        let endpoint = Url::parse(endpoint)?;
-        if !endpoint.scheme().starts_with("http") {
-            return Err(azure_core::Error::with_message(
-                azure_core::error::ErrorKind::Other,
-                format!("{endpoint} must use http(s)"),
-            ));
-        }
-        let auth_policy: Arc<dyn Policy> = Arc::new(BearerTokenAuthorizationPolicy::new(
-            credential,
-            vec!["user_impersonation"],
-        ));
-        Ok(Self {
-            endpoint,
-            subscription_id,
-            api_version: options.api_version,
-            pipeline: Pipeline::new(
-                option_env!("CARGO_PKG_NAME"),
-                option_env!("CARGO_PKG_VERSION"),
-                options.client_options,
-                Vec::default(),
-                vec![auth_policy],
-                None,
-            ),
-        })
-    }
-
     /// Returns the Url associated with this client.
     pub fn endpoint(&self) -> &Url {
         &self.endpoint
@@ -218,7 +170,7 @@ impl KeyVaultClient {
 }
 
 /// Default value for [`KeyVaultClientOptions::api_version`].
-pub(crate) const DEFAULT_API_VERSION: &str = "2026-03-01-preview";
+pub(crate) const DEFAULT_API_VERSION: &str = "2026-02-01";
 
 impl Default for KeyVaultClientOptions {
     fn default() -> Self {

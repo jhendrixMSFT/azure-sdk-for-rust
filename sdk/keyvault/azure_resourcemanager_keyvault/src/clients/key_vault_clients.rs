@@ -4,34 +4,15 @@
 
 use azure_core::{
     credentials::TokenCredential,
-    fmt::SafeDebug,
     http::{
         policies::{auth::BearerTokenAuthorizationPolicy, Policy},
-        ClientOptions, Pipeline, Url,
+        Pipeline, Url,
     },
     tracing, Result,
 };
 use std::sync::Arc;
 
 use crate::KeyVaultClient;
-
-/// Options used when creating a [`KeyVaultClient`](crate::clients::KeyVaultClient)
-#[derive(Clone, SafeDebug)]
-pub struct KeyVaultClientOptions {
-    /// The API version to use for this operation.
-    pub api_version: String,
-    /// Allows customization of the client.
-    pub client_options: ClientOptions,
-}
-
-impl Default for KeyVaultClientOptions {
-    fn default() -> Self {
-        Self {
-            api_version: String::from("2025-05-01"),
-            client_options: ClientOptions::default(),
-        }
-    }
-}
 
 impl KeyVaultClient {
     /// Creates a new KeyVaultClient, using Entra ID authentication.

@@ -11,8 +11,7 @@ use super::{
     ManagedServiceIdentityType, NetworkRuleAction, NetworkRuleBypassOptions,
     PrivateEndpointConnectionProvisioningState, PrivateEndpointServiceConnectionStatus,
     ProvisioningState, PublicNetworkAccess, Reason, ResourceProvisioningState, SecretPermissions,
-    SkuFamily, SkuName, StoragePermissions, TokenBindingMode, TokenBindingStrength,
-    VaultProvisioningState,
+    SkuFamily, SkuName, StoragePermissions, VaultProvisioningState,
 };
 use azure_core::error::{Error, ErrorKind};
 use std::{
@@ -1497,96 +1496,6 @@ impl Display for StoragePermissions {
             StoragePermissions::Setsas => f.write_str("setsas"),
             StoragePermissions::Update => f.write_str("update"),
             StoragePermissions::UnknownValue(s) => f.write_str(s.as_str()),
-        }
-    }
-}
-
-impl<'a> From<&'a TokenBindingMode> for &'a str {
-    fn from(e: &'a TokenBindingMode) -> Self {
-        match e {
-            TokenBindingMode::Enforced => "Enforced",
-            TokenBindingMode::NotEnforced => "NotEnforced",
-            TokenBindingMode::UnknownValue(s) => s.as_ref(),
-        }
-    }
-}
-
-impl FromStr for TokenBindingMode {
-    type Err = Infallible;
-    fn from_str(s: &str) -> ::core::result::Result<Self, <Self as FromStr>::Err> {
-        Ok(match s {
-            "Enforced" => TokenBindingMode::Enforced,
-            "NotEnforced" => TokenBindingMode::NotEnforced,
-            _ => TokenBindingMode::UnknownValue(s.to_string()),
-        })
-    }
-}
-
-impl AsRef<str> for TokenBindingMode {
-    fn as_ref(&self) -> &str {
-        match self {
-            TokenBindingMode::Enforced => "Enforced",
-            TokenBindingMode::NotEnforced => "NotEnforced",
-            TokenBindingMode::UnknownValue(s) => s.as_str(),
-        }
-    }
-}
-
-impl Display for TokenBindingMode {
-    fn fmt(&self, f: &mut Formatter<'_>) -> ::std::fmt::Result {
-        match self {
-            TokenBindingMode::Enforced => f.write_str("Enforced"),
-            TokenBindingMode::NotEnforced => f.write_str("NotEnforced"),
-            TokenBindingMode::UnknownValue(s) => f.write_str(s.as_str()),
-        }
-    }
-}
-
-impl<'a> From<&'a TokenBindingStrength> for &'a str {
-    fn from(e: &'a TokenBindingStrength) -> Self {
-        match e {
-            TokenBindingStrength::AttestedConfidential => "AttestedConfidential",
-            TokenBindingStrength::AttestedTrustedLaunch => "AttestedTrustedLaunch",
-            TokenBindingStrength::NoValidation => "NoValidation",
-            TokenBindingStrength::Unattested => "Unattested",
-            TokenBindingStrength::UnknownValue(s) => s.as_ref(),
-        }
-    }
-}
-
-impl FromStr for TokenBindingStrength {
-    type Err = Infallible;
-    fn from_str(s: &str) -> ::core::result::Result<Self, <Self as FromStr>::Err> {
-        Ok(match s {
-            "AttestedConfidential" => TokenBindingStrength::AttestedConfidential,
-            "AttestedTrustedLaunch" => TokenBindingStrength::AttestedTrustedLaunch,
-            "NoValidation" => TokenBindingStrength::NoValidation,
-            "Unattested" => TokenBindingStrength::Unattested,
-            _ => TokenBindingStrength::UnknownValue(s.to_string()),
-        })
-    }
-}
-
-impl AsRef<str> for TokenBindingStrength {
-    fn as_ref(&self) -> &str {
-        match self {
-            TokenBindingStrength::AttestedConfidential => "AttestedConfidential",
-            TokenBindingStrength::AttestedTrustedLaunch => "AttestedTrustedLaunch",
-            TokenBindingStrength::NoValidation => "NoValidation",
-            TokenBindingStrength::Unattested => "Unattested",
-            TokenBindingStrength::UnknownValue(s) => s.as_str(),
-        }
-    }
-}
-
-impl Display for TokenBindingStrength {
-    fn fmt(&self, f: &mut Formatter<'_>) -> ::std::fmt::Result {
-        match self {
-            TokenBindingStrength::AttestedConfidential => f.write_str("AttestedConfidential"),
-            TokenBindingStrength::AttestedTrustedLaunch => f.write_str("AttestedTrustedLaunch"),
-            TokenBindingStrength::NoValidation => f.write_str("NoValidation"),
-            TokenBindingStrength::Unattested => f.write_str("Unattested"),
-            TokenBindingStrength::UnknownValue(s) => f.write_str(s.as_str()),
         }
     }
 }

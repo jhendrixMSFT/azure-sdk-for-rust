@@ -498,41 +498,6 @@ pub enum StoragePermissions {
     UnknownValue(String),
 }
 
-/// This specifies whether token binding is disabled, enabled or enforced.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub enum TokenBindingMode {
-    /// Token binding is enforced for the vault. Only bounded tokens will be accepted. Bearer tokens will be rejected.
-    Enforced,
-
-    /// Token binding is not enforced for the vault. Bounded tokens will be rejected.
-    NotEnforced,
-
-    /// Any other value not defined in `TokenBindingMode`.
-    UnknownValue(String),
-}
-
-/// Must be one of the following values "NoValidation", "Unattested", "AttestedTrustedLaunch", "AttestedConfidential". Strength
-/// of the token binding increases with each value in that order.
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub enum TokenBindingStrength {
-    /// Bounded Entra token must originate from a confidential VM with attestation proof from the attestation authority like Microsoft
-    /// Azure Attestation.
-    AttestedConfidential,
-
-    /// Bounded Entra token must originate from a trusted launch VM with attestation proof from the attestation authority like
-    /// Microsoft Azure Attestation.
-    AttestedTrustedLaunch,
-
-    /// This is default when token binding is not enabled.
-    NoValidation,
-
-    /// No attestation proof is required for the bounded token.
-    Unattested,
-
-    /// Any other value not defined in `TokenBindingStrength`.
-    UnknownValue(String),
-}
-
 /// Provisioning state of the vault.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum VaultProvisioningState {

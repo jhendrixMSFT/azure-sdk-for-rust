@@ -12,7 +12,6 @@ use azure_core::{
     error::ErrorKind,
     Error, Result,
 };
-pub use key_vault_clients::KeyVaultClientOptions;
 
 /// Audience for Azure Key Vault Resource Manager requests.
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]

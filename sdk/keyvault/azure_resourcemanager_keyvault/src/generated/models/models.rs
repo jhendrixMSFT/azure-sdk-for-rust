@@ -11,8 +11,7 @@ use super::{
     ManagedServiceIdentityType, NetworkRuleAction, NetworkRuleBypassOptions,
     PrivateEndpointConnectionProvisioningState, PrivateEndpointServiceConnectionStatus,
     ProvisioningState, PublicNetworkAccess, Reason, ResourceProvisioningState, SecretPermissions,
-    SkuFamily, SkuName, StoragePermissions, TokenBindingMode, TokenBindingStrength,
-    VaultProvisioningState,
+    SkuFamily, SkuName, StoragePermissions, VaultProvisioningState,
 };
 use azure_core::{base64, fmt::SafeDebug, http::Etag, time::OffsetDateTime, Value};
 use serde::{Deserialize, Serialize};
@@ -2460,22 +2459,6 @@ pub struct SystemData {
     pub last_modified_by_type: Option<CreatedByType>,
 }
 
-/// Configuration for Token Binding for Entra tokens
-#[derive(Clone, Default, Deserialize, SafeDebug, Serialize)]
-pub struct TokenBindingParameters {
-    /// Must be one of the following values "NoValidation", "Unattested", "AttestedTrustedLaunch", "AttestedConfidential". Strength
-    /// of the token binding increases with each value in that order.
-    #[serde(
-        rename = "minimumTokenBindingStrength",
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub minimum_token_binding_strength: Option<TokenBindingStrength>,
-
-    /// This specifies whether token binding is disabled, enabled or enforced.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<TokenBindingMode>,
-}
-
 /// Tracked Resource
 ///
 /// The resource model definition for an Azure Resource Manager tracked top level resource which has 'tags' and a 'location'
@@ -2771,13 +2754,6 @@ pub struct VaultPatchProperties {
     /// The Azure Active Directory tenant ID that should be used for authenticating requests to the key vault.
     #[serde(rename = "tenantId", skip_serializing_if = "Option::is_none")]
     pub tenant_id: Option<String>,
-
-    /// Configuration for Token Binding for Entra tokens
-    #[serde(
-        rename = "tokenBindingParameters",
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub token_binding_parameters: Option<TokenBindingParameters>,
 }
 
 /// Properties of the vault
@@ -2889,13 +2865,6 @@ pub struct VaultProperties {
     /// The Azure Active Directory tenant ID that should be used for authenticating requests to the key vault.
     #[serde(rename = "tenantId", skip_serializing_if = "Option::is_none")]
     pub tenant_id: Option<String>,
-
-    /// Configuration for Token Binding for Entra tokens
-    #[serde(
-        rename = "tokenBindingParameters",
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub token_binding_parameters: Option<TokenBindingParameters>,
 
     /// The URI of the vault for performing operations on keys and secrets.
     #[serde(rename = "vaultUri", skip_serializing_if = "Option::is_none")]
