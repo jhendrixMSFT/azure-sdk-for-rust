@@ -72,7 +72,7 @@ mod tests {
         assert!(result.is_ok());
         assert_eq!(
             result.unwrap(),
-            "https://management.core.windows.net/.default"
+            "https://management.core.windows.net/"
         );
     }
 
@@ -83,7 +83,7 @@ mod tests {
         assert!(result.is_ok());
         assert_eq!(
             result.unwrap(),
-            "https://management.core.usgovcloudapi.net/.default"
+            "https://management.core.usgovcloudapi.net/"
         );
     }
 
@@ -94,7 +94,7 @@ mod tests {
         assert!(result.is_ok());
         assert_eq!(
             result.unwrap(),
-            "https://management.core.chinacloudapi.cn/.default"
+            "https://management.core.chinacloudapi.cn/"
         );
     }
 
@@ -106,7 +106,7 @@ mod tests {
         let cloud = CloudConfiguration::Custom(custom);
         let result = audience(&cloud);
         assert!(result.is_ok());
-        assert_eq!(result.unwrap(), "https://custom.audience.local/.default");
+        assert_eq!(result.unwrap(), "https://custom.audience.local/");
     }
 
     #[test]
